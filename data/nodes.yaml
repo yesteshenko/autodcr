@@ -1,0 +1,33 @@
+cisco_ios_par:
+  username:
+    user
+  password:
+    pswd
+  secret:
+    ''
+  device_type:
+    cisco_ios
+
+cisco_xr_par:
+  username:
+    user
+  password:
+    pswd
+  secret:
+    ''
+  device_type:
+    cisco_xr
+
+cisco_ios:
+  HM_N_PE_L:
+    192.168.1.2
+  HM_N_PE_R:
+    192.168.1.3
+
+cisco_xr:
+  KV_P_PE_L:
+    192.168.1.4
+  KV_P_PE_R:
+    192.168.1.5
+
+
