@@ -30,13 +30,14 @@ parameters separator is comma - ';'.
 				   {nodename} - will be replaced by current node name
 				   {ip} - will be replaced by current node ip
 
-				   cmd_type    - set type of command: (!!!tested only for cisco_ios!!!)
-					general (or empty)  - command than not in config mode
-					conf_set            - list of command in config mode
-					conf_enter          - enter to the config mode
-					conf_cmd            - single command in the config mode
-					conf_exit           - exit from the config mode
-					os_exec             - execute shell OS command
+	cmd_type    - set type of command: (!!!tested only for cisco_ios!!!)
+			general (or empty)  - command than not in config mode
+			conf_set            - list of command in config mode
+			conf_enter          - enter to the config mode
+			conf_cmd            - single command in the config mode
+			conf_exit           - exit from the config mode
+			os_exec             - execute shell OS command
+
 	delay_factor    - time for waiting of respond from command execution. Default: 1 - 100 seconds
 
 	search        - string for search in output of command execution. Can be Regex. 

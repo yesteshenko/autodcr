@@ -30,6 +30,6 @@ Tools connecting to each node in the csv/yaml file: data/nodes.csv, and execute 
 - [About](docs/about.md)
 - [License](install/license.md)
 
-Also to view documentations you can go to GitHub Pages of project [AutoDCR](https://yesteshenko.github.io)
+Also to view documentations you can go to GitHub Pages of project [AutoDCR](https://yesteshenko.github.io/autodcr/)
 
 ----
