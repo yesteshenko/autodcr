@@ -83,6 +83,7 @@ For using script, you need perform the following actions:
 1. set startup configurations, see file [autodcr.conf]
 
 1.1. [test][11]
+
 5.3. [Configuration device in mode 'basic configuration template'][53]
 
 2. prepare configuration of device, see [Nodes]
@@ -98,8 +99,8 @@ autodcr.py [-h] [--version] [-nodes filename] [-nodes_type type]
                     [-sort type] [-export type]
 ```
 
-[11](userguide.md#11-test)
-[53](userguide.md#Configuration-device-in-mode-basic-configuration-template)
+[11]: userguide.md#11-test
+[53]: userguide.md#configuration-device-in-mode-basic-configuration-template
 ---
 
 [Home](../README.md)
