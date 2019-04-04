@@ -71,7 +71,10 @@ def get_data_yaml(file, nodes_set):
 		exit(1)
 	try:
 		with open(file) as f:
-			yaml_data = yaml.load(f, Loader=yaml.FullLoader)
+			try:
+				yaml_data = yaml.load(f, Loader=yaml.FullLoader)
+			except:
+				yaml_data = yaml.safe_load(f)
 		logging.debug('%s:  %s' % ('nodes', pformat(yaml_data)))
 	except IOError:
 		print('{}[Err]{} {} list file: {} does not exist'.format(bcolors.FAIL, bcolors.ENDC, 'nodes', file))
@@ -112,7 +115,10 @@ def get_data_colors(file):
 		exit(1)
 	try:
 		with open(file) as f:
-			yaml_data = yaml.load(f, Loader=yaml.FullLoader)
+			try:
+				yaml_data = yaml.load(f, Loader=yaml.FullLoader)
+			except:
+				yaml_data = yaml.safe_load(f)
 		#This call before logging is setting that because logging not work in feature
 		#logging.debug('%s:  %s' % ('Colors set:', pformat(yaml_data)))
 	except IOError:
@@ -408,13 +414,14 @@ def check_output(command_result, export = False):
 			attributes = {'Command': command_result.get('command') , 'Platform': command_result.get('device_type')}
 			logging.debug('attributes for TextFSM: {}'.format(pformat(attributes)))
 			logging.debug('output for TextFSM: {}'.format(pformat(command_result.get('output'))))
-			try:
-				cli_table.ParseCmd(command_result.get('output'), attributes)
-				header = list(cli_table.header)
-				result = [list(row) for row in cli_table]
-			except Exception as e: #clitable.CliTableError:
-				pprint ('\nOutput formating  failed! {}'.format(e))
-				result = [e]			
+			if cli_table:
+				try:
+					cli_table.ParseCmd(command_result.get('output'), attributes)
+					header = list(cli_table.header)
+					result = [list(row) for row in cli_table]
+				except Exception as e: #clitable.CliTableError:
+					pprint ('\nOutput formating  failed! {}'.format(e))
+					result = [e]			
 			logging.debug('header of TextFSM parce: {}'.format(pformat(header)))
 			logging.debug('result of TextFSM parce: {}'.format(pformat(result)))			
 			if export: 
@@ -530,7 +537,7 @@ try:
 	cli_table = clitable.CliTable('index', 'templates')
 except IOError:
 	print('{}[Err]{} TextFSM disabled. CliTable templates not loaded. No such file or directory: \'templates/index\''.format(bcolors.FAIL, bcolors.ENDC))
-
+	cli_table = None
 #Load colors scheme
 colors = get_data_colors('conf/colors.yaml')
 #Load CLI error keywords
