@@ -98,7 +98,7 @@ svn checkout https://github.com/networktocode/ntc-templates/trunk/templates
 
 Complex:
 
-```pip install -r requirements.txt```
+```pip install -r install/requirements.txt```
 
 Separetly:
 
