@@ -21,20 +21,13 @@ Version: 0.2.7
 	  
 	  Use:
 	  
-		## 1 Use argument list of CLI
+		Use argument list of CLI
 
 
 		* Create configurations template and put in subdirectory' data'.
 		* Set file name to parameter 'conf_template' in autodcr.conf or CLI, for example conf_template = conf_template_test.tpl
 		* If need, you can use variables in configurations template (not necessary).
 
-		## 2 Use command
-
-		!This use case has higher priority than using CLI
-
-		* Create configurations template and put in subdirectory 'data'.
-		* If need, you can create file with set of variables file for each node and put in subdirectory 'data' (not necessary).
-		* Set command in command file
 
 [For details see](../docs/configuration_template.md)
 	

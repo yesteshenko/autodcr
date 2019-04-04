@@ -17,13 +17,13 @@ Version: 0.2.9
 
 ## New Features:
 
-	* Possibility use dynamically configuration templates in commands file for apply in device can be used variables table 
+	* Possibility of use configuration templates in commands file for apply in device with dynamically use variables table dependent on connected device.
 	  
 	  Use:
 	  
 		## 1 Use
 
-		* You can create file with set of variables file for each node and put in subdirectory 'data'.
+		* You can create file with set of variables for each node and put in subdirectory 'data'.
 		* Set in command file in section 'command' - 'filename' and 'vartable_filename' by delimiter ','
 		
   ***Example***:

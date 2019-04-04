@@ -36,7 +36,7 @@
 ## [0.3.1](release-notes_v0.3.1.md) 
 
     ### Added
-        - Possibility of SSH connections through device to another device
+	- Possibility of SSH connections through device to another device
 	- Possibility set directly nodename that need to use for get set of variables from variables table for dynamically configuration templates in commands file
 
 ## [0.3.0](release-notes_v0.3.0.md) 
@@ -47,7 +47,7 @@
 ## [0.2.9](release-notes_v0.2.9.md) 
 
     ### Added
-        - Possibility use dynamically configuration templates in commands file for apply in device can be used variables table 
+        - Possibility of use configuration templates with dynamically use variables table dependent on connected device. 
 		
 ## [0.2.8](release-notes_v0.2.8.md) 
 
