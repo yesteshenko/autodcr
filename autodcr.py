@@ -4,7 +4,7 @@
  Name:	AutoDCR - automatization device configurations and reporting
 
  Author:   Evgen Steshenko yesteshenko.dev@gmail.com
- Year:     2018
+ Year:     2019
  About:    This tools is designed for automatization device configurations and reporting: batch command execution for list of nodes
 			with subsequent verification of command output (result) and prepare reports.
  
@@ -83,7 +83,11 @@ else:
 	log_ffilename = config.get('general', 'logdir') + log_filename
 
 loglevel = getattr(logging, config.get('general', 'loglevel').upper())
-logging.basicConfig(filename=log_ffilename, level=loglevel, filemode="w" )# add filemode="w" to overwrite
+try:
+	logging.basicConfig(filename=log_ffilename, level=loglevel, filemode="w" )# add filemode="w" to overwrite
+except IOError:
+	os.mkdir('log')
+	logging.basicConfig(filename=log_ffilename, level=loglevel, filemode="w" )
 
 ''' Parse script arguments '''
 argparser = argparse.ArgumentParser(description='This tools is designed for automatization device configurations and reporting: batch command execution for list of nodes with subsequent verification of command output (result) and prepare reports.')

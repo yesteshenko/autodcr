@@ -71,7 +71,7 @@ def get_data_yaml(file, nodes_set):
 		exit(1)
 	try:
 		with open(file) as f:
-			yaml_data = yaml.load(f)
+			yaml_data = yaml.load(f, Loader=yaml.FullLoader)
 		logging.debug('%s:  %s' % ('nodes', pformat(yaml_data)))
 	except IOError:
 		print('{}[Err]{} {} list file: {} does not exist'.format(bcolors.FAIL, bcolors.ENDC, 'nodes', file))
@@ -112,7 +112,7 @@ def get_data_colors(file):
 		exit(1)
 	try:
 		with open(file) as f:
-			yaml_data = yaml.load(f)
+			yaml_data = yaml.load(f, Loader=yaml.FullLoader)
 		#This call before logging is setting that because logging not work in feature
 		#logging.debug('%s:  %s' % ('Colors set:', pformat(yaml_data)))
 	except IOError:
@@ -525,8 +525,12 @@ def prepare_summary_report(results, BASE_DIR, report_sort, nodes_list, commands_
 	print (summary_report)
 	return summary_report
 
+#Load CliTable templates
+try:
+	cli_table = clitable.CliTable('index', 'templates')
+except IOError:
+	print('{}[Err]{} TextFSM disabled. CliTable templates not loaded. No such file or directory: \'templates/index\''.format(bcolors.FAIL, bcolors.ENDC))
 
-cli_table = clitable.CliTable('index', 'templates')
 #Load colors scheme
 colors = get_data_colors('conf/colors.yaml')
 #Load CLI error keywords
