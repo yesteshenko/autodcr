@@ -70,7 +70,7 @@ if os.path.isfile(config_file) :
 	config = SafeConfigParser()
 	config.read(config_file)
 else :
-	print('[Err] Configuration file: {} does not exist'.format(config_file))
+	print('{}[Err]{} Configuration file: {} does not exist'.format(bcolors.FAIL, bcolors.ENDC, config_file))
 	exit(0)
 	
 #Set logging
@@ -87,7 +87,7 @@ logging.basicConfig(filename=log_ffilename, level=loglevel, filemode="w" )# add 
 
 ''' Parse script arguments '''
 argparser = argparse.ArgumentParser(description='This tools is designed for automatization device configurations and reporting: batch command execution for list of nodes with subsequent verification of command output (result) and prepare reports.')
-argparser.add_argument('--version', action='version', version='%(prog)s 0.2.7')
+argparser.add_argument('--version', action='version', version='%(prog)s 0.3.5')
 argparser.add_argument("-nodes", action="store", dest="nodes_filename", metavar='filename', default=config.get('general', 'nodes'), required=False, help="list of nodes with connections parameters (default: {})".format(config.get('general', 'nodes')))
 argparser.add_argument("-nodes_type", action="store", dest="nodes_type", metavar='type', default=config.get('general', 'nodes_type'), required=False, help="type of config file for import nodes:\n for CSV format - csv,\n for YAML format - yaml (default: {})".format(config.get('general', 'nodes_type')))
 argparser.add_argument("-nodes_set", action="store", metavar='val', dest="nodes_set", required=False, nargs=3, help='Set of values of nodes from yaml data file. Arguments: 1st: group, 2nd: node_name or all, 3rd: parameners')
@@ -100,12 +100,18 @@ argparser.add_argument("-searchfail", action="store", dest="searchfail", metavar
 argparser.add_argument("-sort", action="store", dest="sort", metavar='type', choices=['node', 'command'], default=config.get('general', 'report_sort'), required=False, help="Sort by node = node (by default),  sort by command = command (default: {})".format(config.get('general', 'report_sort')))
 argparser.add_argument("-export", action="store", dest="export", metavar='type', choices=['excel', 'word', 'False'], default=config.get('general', 'export'), required=False, help="Set export result. Values: False - no export; excel - export result of search to excel (only command in search type mode: complex); word - export output of command execution to word template (./data/protocol_template.docx)  (default: {})".format(config.get('general', 'export')))
 args = argparser.parse_args()
-logging.debug('Arguments list:  %s' % (args))	
+logging.debug('Arguments list:  %s' % (args))
+#If need to print DEBUG to console:
+#logging.getLogger().setLevel(logging.DEBUG)	
 
 #Disable logging:
-if logstatus == 'False':
+if logstatus == 'False' and sys.version_info[0] == 2:
 	logging.disable(config.get('general', 'loglevel'))
 	print ('!Log is disabled! Log=' + logstatus)
+else:
+	#For pyton v3 do not disable logging!!! it is bug (getting error  in isEnabledFor if self.manager.disable >= level: TypeError: '>=' not supported between instances of 'str' and 'int')!!!
+	logging.basicConfig(filename=log_ffilename, level='INFO', filemode="w" )
+
 print ('Script running on Python version: {}'.format(sys.version_info[0]))
 logging.info ('Script running on Python version: {}'.format(sys.version_info[0]))
 logging.info ("Start working: %s" % (datetime.datetime.now()))
@@ -128,37 +134,46 @@ cmd_exec_logic = {
 }
 results = []
 max_process = int(config.get('general', 'max_process'))
+server_par = {
+		'logstatus': eval(config.get('general', 'log')),
+		'port': int(config.get('server', 'port')),
+		'host': config.get('server', 'host')
+}
 
-''' Read and load data '''
-if args.nodes_type == 'yaml':
-	nodes_data = get_data_yaml(nodes_file, args)
-	nodes_list_dist = nodes_data.get('dict')
-	nodes_list = nodes_data.get('list')
+if config.get('server', 'server') == 'True': 
+	from lib.rest_appl import *
+	server(BASE_DIR, nodes_file, args, cmd_exec_logic, max_process, server_par)
+
 else:
-	nodes_list = get_data(nodes_file, 'nodes')		
+	''' Read and load data '''
+	if args.nodes_type == 'yaml':
+		nodes_data = get_data_yaml(nodes_file, args.nodes_set)
+		nodes_list_dist = nodes_data.get('dict')
+		nodes_list = nodes_data.get('list')
+	else:
+		nodes_list = get_data(nodes_file, 'nodes')
+	if args.nodes_type == 'csv': nodes_list_dist = lits_to_dict(nodes_list)
+	commands_list = get_data(commands_file, 'commands')
+	if args.conf_template: commands_list = parce_conf_template(os.path.normpath(BASE_DIR + 'data/' + args.conf_template), commands_list, args)		
+	''' Transformation list to dictionary '''
+	commands_list_dist = lits_to_dict(commands_list)	
+	
+	''' Executing commands '''
+	if cmd_exec_logic.get('multiprocessing_exec'):
+		results =  conn_processes(connect_ssh, nodes_list_dist, commands_list_dist, cmd_exec_logic, max_process)
+	else:
+		for device in nodes_list_dist:
+			results.append(connect_ssh(device, commands_list_dist, cmd_exec_logic))
+			
+	logging.debug('Result of exec cmd on all nodes: %s' % (pformat(results)))
 
-commands_list = get_data(commands_file, 'commands')
-if args.conf_template: commands_list = parce_conf_template(os.path.normpath(BASE_DIR + 'data/' + args.conf_template), commands_list, args)		
+	''' Reporting '''
+	print ('Start report:')
+	logging.info('Start reporting:.....')
+	print_full_report_to_file(results, BASE_DIR)
+	prepare_summary_report(results, BASE_DIR, args.sort, nodes_list[1:], commands_list[1:])
+	if args.export == 'excel': xlsx_export(results, BASE_DIR)
+	if args.export == 'word': docx_export(results, BASE_DIR)
 
-''' Transformation list to dictionary '''
-if args.nodes_type == 'csv': nodes_list_dist = lits_to_dict(nodes_list)
-commands_list_dist = lits_to_dict(commands_list)
-
-''' Executing commands '''
-if cmd_exec_logic.get('multiprocessing_exec'):
-	results =  conn_processes(connect_ssh, nodes_list_dist, commands_list_dist, cmd_exec_logic, max_process)
-else:
-	for device in nodes_list_dist:
-		results.append(connect_ssh(device, commands_list_dist, cmd_exec_logic))
-logging.debug('Result of exec cmd on nodes: %s' % (pformat(results)))
-
-''' Reporting '''
-print ('Start report:')
-logging.info('Start reporting:.....')
-print_full_report_to_file(results, BASE_DIR)
-prepare_summary_report(results, BASE_DIR, args.sort, nodes_list[1:], commands_list[1:])
-if args.export == 'excel': xlsx_export(results, BASE_DIR)
-if args.export == 'word': docx_export(results, BASE_DIR)
-
-logging.info('End of executing script, time: %s' % (datetime.datetime.now() - start_time))
-print('End of executing script, time: %s' % (datetime.datetime.now() - start_time))
+	logging.info('End of executing script, time: %s' % (datetime.datetime.now() - start_time))
+	print('End of executing script, time: %s' % (datetime.datetime.now() - start_time))

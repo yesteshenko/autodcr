@@ -1,0 +1,29 @@
+report:
+    HEADER:
+    
+    OKGREEN:
+        1: " Ok "
+        2: " UP "
+        
+    OKBLUE:
+        1: "IDLE"
+        
+    WARNING:
+        1: "UNKNOWN"
+        2: "Attention"
+        
+    FAIL:
+        1: " Err "
+        2: "Error"
+        3: "Fail"
+        4: "Err: "
+        5: "DOWN"
+        
+    BOLD:
+        1: "Type"
+        2: "Name"
+        3: "Status"
+        4: "Interface"
+        5: "ID"
+        
+    UNDERLINE:

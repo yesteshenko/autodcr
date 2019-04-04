@@ -14,6 +14,7 @@ The legal stuff.
 * Pretty-print tabular data  - [tabulate](https://pypi.org/project/tabulate/).
 * Python module for parsing semi-structured text into python tables.  - [textfsm](https://github.com/google/textfsm).
 * TextFSM templates for parsing show commands of network devices  - [textfsm]( https://github.com/networktocode/ntc-templates)
+* Flask is a microframework for Python based on Werkzeug, Jinja 2 and good intentions. - [Flask]http://flask.pocoo.org/
 
 Many thanks to the authors and contributors of projects.
 
@@ -28,7 +29,7 @@ it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 of the License, or
 (at your option) any later version.
 
-Foobar is distributed in the hope that it will be useful,
+AutoDCR is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.

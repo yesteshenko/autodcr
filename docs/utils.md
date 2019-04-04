@@ -63,7 +63,7 @@ execute script:
 
 ```
 cmdname;command;cmd_type;delay_factor;search;search_type;result_marker;expect
-CnfCmdList;interface GigabitEthernet0/2,description Test_script,exit;conf_set;1;promt;count;;
+CnfCmdList;interface GigabitEthernet0/2,description Test_script,exit;conf_set;1;prompt;count;;
 WriteMem;write memory;general;1;OK;simple;Ok,Attention!;
 ```
 

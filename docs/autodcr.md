@@ -1,7 +1,7 @@
  Name:	AutoDCR - automatization device configurations and reporting
 
- Author:   Evgen Steshenko yesteshenko@gmail.com
- Year:     2018
+ Author:   Evgen Steshenko yesteshenko.dev@gmail.com
+ Year:     2019
  About:    This tools is designed for automatization device configurations and reporting: batch command execution for list of nodes
 			with subsequent verification of command output (result)and prepare reports.
  
@@ -18,14 +18,6 @@
  1. Set general default configuration in conf file .conf (if need)
  2. Prepare list of nodes and commands in 'data' subfolder
  3. Check installation of Python (tested on Python 2.7.5 and 3.6)
-	install additional lib:
-	 pip install paramiko
-	 pip install netmiko
-	 pip install tabulate
-	 pip install ConfigParser
-	 pip install python-docx
-	 pip install openpyxl
-	hints: if you have problem with lib: view Python -v and set to pip additional par whith path to lib: sudo pip install --target=/usr/local/lib/python3.6 netmiko 
  4. Execute with default configuration:
 		./autodcr.py
 	or set in command line:

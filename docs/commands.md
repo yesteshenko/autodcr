@@ -22,33 +22,58 @@ parameters separator is comma - ';'.
 	command        - command than will be send to the node:
 			special cmd:
 				enter    - send "enter" to the node
+				timeout - will be set timeout of execution commands according to 'delay_factor' in second
+			special variables:	
 				{} in command means use result value of previous command 
-				   (expect list of values, for example: 1 or  1,2,3). 
+				   (expects list of values, for example: 1 or  1,2,3). 
 				   This command will be executed as many time as many result value will be.
 				<> in command means use result report of previous command for send to shell OS command
-				   {command} - will be replaced by previous command
-				   {nodename} - will be replaced by current node name
-				   {ip} - will be replaced by current node ip
-
+				{command} 	- will be replaced by previous command
+				{nodename} 	- will be replaced by current node name
+				{nodeip} 	- will be replaced by current node ip
+				{datetime}	- will be replaced by current date and time
+				{date}		- will be replaced by current date
+				{$'varname'} - 	will be replaced 'varname' by value of previous command report (complex mode).
+					Expects table, where 1 row it is 'varname' list, next line it is values list
+					This command will be executed as many times as many result lines will be.
+			for conf_tpl mode:
+				empty - will be try get configuration template and variables from argument list CLI
+				template_filename.tpl[,var_filename_.csv][,nodename] - individual set of templates
+					template_filename.tpl	- config template with or without (if not set 'var_filename_.csv') variables 
+					var_filename_.csv		- variables for replace in  config template in csv format. 
+											 set of variables will be apply according to nodename that currently connected
+											 Optional, can be empty
+					nodename				- set directly nodename that need to use for get set of variables  from 'var_filename_.csv'
+											 Optional, can be empty
+					
 	cmd_type    - set type of command: (!!!tested only for cisco_ios!!!)
 			general (or empty)  - command than not in config mode
 			conf_set            - list of command in config mode
+								in this mode script will be enter to configutation mode, execute list of command and exit 
 			conf_enter          - enter to the config mode
 			conf_cmd            - single command in the config mode
 			conf_exit           - exit from the config mode
 			os_exec             - execute shell OS command
-
+			conf_tpl			- configuration template mode
+			usr_req				- request user for value that will be used in next command in 'search' part
+			choose_req			- request user for value that will be used in next command in 'command' part based on report previous command
+			
 	delay_factor    - time for waiting of respond from command execution. Default: 1 - 100 seconds
 
 	search        - string for search in output of command execution. Can be Regex. 
 					If use group name in regex parent  ?P<name>, 
 					that name will be used for headers in report table.
 				special parent: (!!!tested only for cisco_ios!!!)
-				promt        - match promt, if no additional output of command execution (Regex: '.*#$')
-				promt_cnf    - match promt, if no additional output of command execution (Regex: '.*#$')
+				prompt        - match current prompt, if no additional output of command execution
+				prompt_cnf    - match config prompt, if no additional output of command execution (Regex: '.*\(\S+\)\#$')
 				request      - match additional request for command execution (Regex: '.*: $')
 				confirm      - match additional confirmation for command execution (Regex: '.* \[.*\]')
-
+				{nodename} 	- will be replaced by current node name
+				{nodeip} 	- will be replaced by current node ip
+				{datetime}	- will be replaced by current date and time
+				{date}		- will be replaced by current date
+				{usr_req}	- will be replaced by value from user entered
+				
 	search_type    - set type of logic parsing result command execution report:
 				simple            - output result of search
 				complex           - output table of search result (use group in regex parent )
@@ -78,7 +103,7 @@ Example:
 ```
 cmdname;command;delay_factor;search;search_type;result_marker
 Get versions;sh ver;1;Cisco IOS Software;simple;
-Enter;enter;1;promt;;
+Enter;enter;1;prompt;;
 Get voice port;show voice port;1;(ISDN \d\/\d).*\n.*\n (Operation State is \S+)\n (Administrative State is \S+)+;complex;
 
 Commands name: Get versions
@@ -96,8 +121,8 @@ Commands name: Enter
 ------------------------------------------
 | nodename                | Result                               |
 |:------------------------|:-------------------------------------|
-| Node_1  | Successful [search: promt, count: 1] |
-| Node_2  | Successful [search: promt, count: 1] |
+| Node_1  | Successful [search: prompt, count: 1] |
+| Node_2  | Successful [search: prompt, count: 1] |
 
 ==========================================
 
@@ -125,12 +150,12 @@ Executing command one by one:
 
 cmdname;command;cmd_type;delay_factor;search;search_type;result_marker
 Get versions;sh ver;;1;Cisco IOS Software;simple;
-Enter;enter;;1;promt;;
-EntConfT;conf t;conf_enter;1;promt;;
-EntIf0/1;interface GigabitEthernet0/1;conf_cmd;1;promt;;
-AddDesc;description Test_script;conf_cmd;1;promt;;
-ExtIf0/1;exit;conf_cmd;1;promt;;
-ExtConfT;exit;conf_exit;1;promt;;
+Enter;enter;;1;prompt;;
+EntConfT;conf t;conf_enter;1;prompt;;
+EntIf0/1;interface GigabitEthernet0/1;conf_cmd;1;prompt;;
+AddDesc;description Test_script;conf_cmd;1;prompt;;
+ExtIf0/1;exit;conf_cmd;1;prompt;;
+ExtConfT;exit;conf_exit;1;prompt;;
 WriteM;write memory;;1;OK;simple;
 
 ==========================================
@@ -141,12 +166,12 @@ WriteM;write memory;;1;OK;simple;
 | CmdName      | Result                                                                  |
 |:-------------|:------------------------------------------------------------------------|
 | Get versions | Successful [search: Cisco IOS Software, result: ['Cisco IOS Software']] |
-| Enter        | Successful [search: promt, count: 1]                                    |
-| EntConfT     | Successful [search: promt, count: 1]                                    |
-| EntIf0/1     | Successful [search: promt, count: 1]                                    |
-| AddDesc      | Successful [search: promt, count: 1]                                    |
-| ExtIf0/1     | Successful [search: promt, count: 1]                                    |
-| ExtConfT     | Successful [search: promt, count: 1]                                    |
+| Enter        | Successful [search: prompt, count: 1]                                    |
+| EntConfT     | Successful [search: prompt, count: 1]                                    |
+| EntIf0/1     | Successful [search: prompt, count: 1]                                    |
+| AddDesc      | Successful [search: prompt, count: 1]                                    |
+| ExtIf0/1     | Successful [search: prompt, count: 1]                                    |
+| ExtConfT     | Successful [search: prompt, count: 1]                                    |
 | WriteM       | Successful [search: OK, result: ['OK']]                                 |
 
 ==========================================
@@ -155,7 +180,7 @@ Executing list of commands:
 
 cmdname;command;cmd_type;delay_factor;search;search_type;result_marker
 Get versions;sh ver;;1;Cisco IOS Software;simple;
-AddEntIf0/1Desc;interface GigabitEthernet0/1,description Test_script2,exit;conf_set;1;promt;;
+AddEntIf0/1Desc;interface GigabitEthernet0/1,description Test_script2,exit;conf_set;1;prompt;;
 WriteM;write memory;;1;OK;simple;
 
 Summary report:
@@ -168,7 +193,7 @@ Summary report:
 | CmdName         | Result                                                                  |
 |:----------------|:------------------------------------------------------------------------|
 | Get versions    | Successful [search: Cisco IOS Software, result: ['Cisco IOS Software']] |
-| AddEntIf0/1Desc | Successful [search: promt, count: 1]                                    |
+| AddEntIf0/1Desc | Successful [search: prompt, count: 1]                                    |
 | WriteM          | Successful [search: OK, result: ['OK']]                                 |
 
 ==========================================
