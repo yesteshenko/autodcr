@@ -98,7 +98,7 @@ svn checkout https://github.com/networktocode/ntc-templates/trunk/templates
 
 Complex:
 
-```pip install -r requirements.txt```
+```pip install -r install/requirements.txt```
 
 Separetly:
 
@@ -108,6 +108,8 @@ pip install tabulate
 pip install ConfigParser
 pip install python-docx
 pip install openpyxl
+pip install PyYAML
+pip install Flask
 ```
 
 Change the access permissions, exec in directory of installations AutoDCR
@@ -121,18 +123,6 @@ chmod -R 755 ./utils/*.py
 ```
 pip install --upgrade pip setuptools
 yum install libxslt-devel libxml2-devel
-```
-
-for: VM pyneng
-
-```
-    sudo pip install --target=/usr/local/lib/python3.6 netmiko
-    sudo pip install --target=/usr/local/lib/python3.6 ConfigParser
-    sudo pip install --target=/usr/local/lib/python3.6 tabulate
-    sudo pip install --target=/usr/local/lib/python3.6 python-docx
-    sudo pip install --target=/usr/local/lib/python3.6 openpyxl    
-    interpreter (change in the script):
-    #!/usr/local/bin/python3.6
 ```
 ----
     

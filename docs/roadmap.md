@@ -1,6 +1,6 @@
 # Road map
 
-Add RESTfull API
+Add authorization for RESTful API and possibility of use HTTPS.
 
 ----
 

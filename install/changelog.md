@@ -2,7 +2,61 @@
     
     All notable changes to this project will be documented in this file.
 
-## [0.2.7] 
+## [0.3.5](release-notes_v0.3.5.md)
+
+    ### Added
+	- Possibility realtime request user for value that will be used in next command in 'command' part based on report previous comman
+    ### Fix
+	- Fix bags
+		
+## [0.3.4](release-notes_v0.3.4.md)
+
+    ### Added
+	- Possibility realtime request user for value that will be used in next command in 'search' part
+	- Possibility set timeout for execution commands.
+    ### Fix
+	- Fix bags
+	
+## [0.3.3](release-notes_v0.3.3.md) 
+
+    ### Added
+	- Possibility using result value table of previous command report (complex mode) for new command.
+	- build-in variables for replace in 'command' and 'search' sections in commands file.
+    ### Fix
+	- Fix bags
+	
+## [0.3.2](release-notes_v0.3.2.md) 
+
+    ### Added
+	- Possibility of setting own colors scheme in report.
+	- Possibility of setting CLI errors keywords for check execution of command.
+    ### Fix
+	- Fix bags
+		
+## [0.3.1](release-notes_v0.3.1.md) 
+
+    ### Added
+	- Possibility of SSH connections through device to another device
+	- Possibility set directly nodename that need to use for get set of variables from variables table for dynamically configuration templates in commands file
+
+## [0.3.0](release-notes_v0.3.0.md) 
+
+    ### Added
+        - RESTful API
+	
+## [0.2.9](release-notes_v0.2.9.md) 
+
+    ### Added
+        - Possibility of use configuration templates with dynamically use variables table dependent on connected device. 
+		
+## [0.2.8](release-notes_v0.2.8.md) 
+
+    ### Added
+        - Possibility use dynamically configuration templates in commands file for apply in device
+    ### Fix
+        - Fix bags if using Python v3
+
+## [0.2.7](release-notes_v0.2.7.md) 
 
     ### Added
         - Possibility use configuration templates for apply in device
@@ -10,29 +64,29 @@
         - Fix bags in report using TextFSM
         - Fix error when executing command on Cisco XR
 
-## [0.2.6] 
+## [0.2.6](release-notes_v0.2.6.md) 
 
     ### Added
         - Possibility to set regular expression pattern to use for determining end of output in reading channel process.		
     
-## [0.2.5] 
+## [0.2.5](release-notes_v0.2.5.md) 
 
     ### Added
         - Possibility  of controll maximum number of parallel processes when using multiprocessing mode
     
-## [0.2.4] 
+## [0.2.4](release-notes_v0.2.4.md) 
 
     ### Added
         - Possibility use YAML format in nodes configuration file
     ### Fix
         - Error when use wrong separator in incoming data command file
     
-## [0.2.3] 
+## [0.2.3](release-notes_v0.2.3.md) 
 
     ### Added
         - Possibility use result report of previous command for send to shell OS command
     
-## [0.2.2] 
+## [0.2.2](release-notes_v0.2.2.md) 
 
     ### Added
         - Possibility parse output of command execution by TextFSM module and templates in subdir TextFSMtemplates
@@ -40,7 +94,7 @@
     ### Fix
         - Fix bags in report
 
-## [0.2.1] 
+## [0.2.1](release-notes_v0.2.1.md) 
 
     ### Added
         - Export result of command execution to excel or word

@@ -2,6 +2,7 @@
 
 ## Introduction
 
+
 The document describe rules and features for AutoDCR
 
 ---
@@ -28,8 +29,30 @@ autodcr/
 ## Static configurations
 
 Starting static configurations locate in file [autodcr.conf]
-Description configurations parameters can be found in that file and below
+Description configurations parameters can be found in that file
 
+###Set colors scheme
+
+You can set own colors scheme in report.
+For this need describe keywords in file [colors.yaml]  in yaml format:
+
+For example:
+```
+report: 
+    OKGREEN:
+        1: " Ok "
+```
+
+###Set CLI error keywords
+
+You can set CLI errors keywords for check execution of command.
+For this need write keywords or RegExp in file [cli.err], one by line.
+
+For example:
+```
+^Unknown
+Invalid input detected
+```
 ---
 
 ## Dynamic configurations
@@ -89,8 +112,6 @@ autodcr.py [-h] [--version] [-nodes filename] [-nodes_type type]
                     [-processing type] [-error type] [-searchfail type]
                     [-sort type] [-export type]
 ```
-
-
 ---
 
 [Home](../README.md)

@@ -23,6 +23,7 @@ Tools connecting to each node in the csv/yaml file: data/nodes.csv, and execute 
 - [Utils](docs/utils.md)
 - [Docx template](docs/protocol_template.md)
 - [Configuration template](docs/configuration_template.md)
+- [Use cases](docs/usecases.md)
 - [Release notes](install/release-notes.md)
 - [Changelog](install/changelog.md)
 - [Road map](docs/roadmap.md)
